@@ -1,0 +1,191 @@
+<!-- alert message start-->
+<div
+  class="alert alert-success notification"
+  id="alert-success"
+  *ngIf="responseMsg === 'success1'"
+>
+  <span class="bold-font"></span> Successfully leave Applied!!!
+</div>
+<div
+  class="alert alert-danger notification"
+  id="alert-danger"
+  *ngIf="responseMsg === 'fail'"
+>
+  <span class="bold-font">Error:</span> Something went Wrong !!!
+</div>
+
+<!-- alert message end-->
+<!--   Apply leave  start -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <!-- card header start -->
+      <div class="card-header">
+        <h5 class="card-title">Apply Leave</h5>
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+          <!-- <button type="button" class="btn btn-tool" data-widget="remove">
+            <i class="fa fa-times"></i>
+          </button> -->
+        </div>
+      </div>
+      <!-- card-header end -->
+
+      <!-- card body start -->
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-primary">
+              <!-- form start -->
+              <form role="form">
+                <!-- card body start -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label for="apply-leave-startdate">Start Date </label>
+                        <input
+                          id="check"
+                          type="date"
+                          class="form-control"
+                          id="apply-leave-startdate"
+                          name="apply-leave-startdate"
+                          placeholder="yyyy/mm/dd"
+                          [(ngModel)]="leaveRequest.startDate"
+                          (change)="noOfDays()"
+                          max="{{ maxStartDate | date: 'yyyy-MM-dd' }}"
+                          min="{{ minDate | date: 'yyyy-MM-dd' }}"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label for="apply-leave-enddate">End Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          name="apply-leave-enddate"
+                          id="apply-leave-enddate"
+                          placeholder="yyyy/mm/dd"
+                          [(ngModel)]="leaveRequest.endDate"
+                          (change)="noOfDays()"
+                          [min]="leaveRequest.startDate | date: 'yyyy-MM-dd'"
+                          [max]="maxEndDate | date: 'yyyy-MM-dd'"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label for="apply-leave-NumberofDays"
+                          >Number of Days</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="apply-leave-NumberofDays"
+                          id="apply-leave-NumberofDays"
+                          disabled
+                          [(ngModel)]="leaveRequest.noOfDays"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="apply-leave-TypeofLeave"
+                          >Type of Leave</label
+                        >
+                        <select
+                          class="form-control"
+                          id="apply-leave-TypeofLeave"
+                          name="apply-leave-TypeofLeave"
+                          [(ngModel)]="leaveRequest.leaveAllocation"
+                        >
+                          <option selected default hidden [ngValue]="default"
+                            >select leave type</option
+                          >
+                          <option
+                            *ngFor="let la of leaveAllocation"
+                            [ngValue]="la"
+                            >{{ la.leaveType.leaveTypeValue }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="apply-leave-attachments">Attachments</label>
+                        <input
+                          type="file"
+                          class="form-control"
+                          name="apply-leave-attachments"
+                          id="apply-leave-attachments"
+                          accept="file_extension"
+                          [(ngModel)]="leaveRequest.attachment"
+                          (change)="fileChange($event)"
+                        />
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="apply-leave-SendCopyto">Send Copy to</label>
+                        <input type="text" class="form-control" name="apply-leave-SendCopyto" id="apply-leave-SendCopyto"
+                          placeholder=" Sent Copy to">
+                      </div>
+                    </div> -->
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="apply-leave-reason">Reason</label>
+                        <!-- <textarea type="textarea" class="form-control" rows="4" name="apply-leave-reason"
+                          id="apply-leave-reason" placeholder="Enter Reason"
+                          [(ngModel)]="leaveRequest.reason"></textarea> -->
+                        <textarea
+                          type="text"
+                          #input
+                          maxlength="200"
+                          class="form-control"
+                          rows="3"
+                          name="promotion-datepromoted"
+                          id="promotion-datepromoted"
+                          [(ngModel)]="leaveRequest.reason"
+                          placeholder="Enter the reason for leave"
+                        ></textarea>
+                        {{ input.value?.length || 0 }}/200
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- card body end -->
+                <div class="card-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="clearField()"
+                  >
+                    Clear
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#conform-leave"
+                    (click)="sendLeaveRequest()"
+                  >
+                    Request
+                  </button>
+                </div>
+              </form>
+              <!-- form end -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- card body end -->
+    </div>
+  </div>
+</div>
+<!-- apply leave end -->

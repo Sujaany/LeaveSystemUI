@@ -1,0 +1,174 @@
+<!-- alert message start-->
+<!-- <div
+  class="alert alert-success notification"
+  id="alert-success"
+  *ngIf="responseMsg === 'success'"
+>
+  <span class="bold-font">Success:</span> Cancelled Applied Leave////
+</div>
+<div
+  class="alert alert-danger notification"
+  id="alert-danger"
+  *ngIf="responseMsg === 'fail'"
+>
+  <span class="bold-font">Error:</span> Something went wrong.
+</div> -->
+
+<!-- alert message end-->
+<div
+  class="alert alert-success notification"
+  id="alert-success"
+  *ngIf="responseMsg === 'success'"
+>
+  <span class="bold-font">Success:</span> Successfully leave cancled !!!
+</div>
+<div
+  class="alert alert-danger notification"
+  id="alert-danger"
+  *ngIf="responseMsg === 'fail'"
+>
+  <span class="bold-font">Error:</span> Something went wrong !!!
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Leave History</h5>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-tool"
+            (click)="getLeaveRequestByUser()"
+          >
+            <a>&#8635;</a>
+          </button>
+          <!-- <button type="button" class="btn btn-tool" data-widget="remove">
+            <i class="fa fa-times"></i>
+          </button> -->
+        </div>
+      </div>
+
+      <!--filter-->
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            (keyup)="applyFilter($event.target.value)"
+            placeholder="Filter"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="card-body">
+        <div class="mat-elevation-z8 mb-3">
+          <mat-table [dataSource]="dataSource" matSort>
+            <!-- carryforwarded column start -->
+            <ng-container matColumnDef="startDate">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Start Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let leave" style="text-align:center">
+                {{ leave.startDate | date: "yyyy.MM.dd" }}
+              </mat-cell>
+            </ng-container>
+            <!-- carry forwarded column end -->
+            <!-- employee name column start -->
+            <ng-container matColumnDef="endDate">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                End Date
+              </mat-header-cell>
+              <mat-cell *matCellDef="let leave">
+                {{ leave.endDate | date: "yyyy.MM.dd" }}</mat-cell
+              >
+            </ng-container>
+            <!-- employee name column end -->
+            <!-- Employee Id column start -->
+            <ng-container matColumnDef="numberOfDays">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Number of Days
+              </mat-header-cell>
+              <mat-cell *matCellDef="let leave" style="text-align:center">
+                {{ leave.noOfDays }}</mat-cell
+              >
+            </ng-container>
+            <!-- Employee Id column end -->
+            <!-- Department column start -->
+            <ng-container matColumnDef="leaveType">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Leave Type</mat-header-cell
+              >
+              <mat-cell *matCellDef="let leave">
+                {{ leave.leaveAllocation.leaveType.leaveTypeValue }}</mat-cell
+              >
+            </ng-container>
+            <!-- Department column end -->
+            <!-- column for carry forward start -->
+            <ng-container matColumnDef="reason">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Reason</mat-header-cell
+              >
+              <mat-cell *matCellDef="let leave">
+                <p
+                  data-toggle="modal"
+                  data-target="#view-leave-request-modal-reson"
+                  (click)="sendLeaveRequest(leave)"
+                >
+                  {{ leave.reason }}
+                </p>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Status</mat-header-cell
+              >
+              <mat-cell *matCellDef="let leave"> {{ leave.status }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cancel">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let leave">
+                <button
+                  class="btn btn-outline-danger"
+                  data-toggle="modal"
+                  data-target="#cancel-modal"
+                  *ngIf="
+                    leave.status == 'PENDING' || leave.status == 'ACCEPTED'
+                  "
+                  (click)="sendLeaveRequest(leave)"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-outline-danger"
+                  data-toggle="modal"
+                  data-target="#view-reject-cancel-leave-request-modal"
+                  *ngIf="leave.status == 'TAKE_LEAVE'"
+                  (click)="sendLeaveRequestIndividual(leave)"
+                >
+                  View
+                </button>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          </mat-table>
+          <!-- column for carry forward end -->
+          <!-- pagination start -->
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+          <!-- pagination end -->
+        </div>
+      </div>
+      <!-- card body end -->
+    </div>
+  </div>
+</div>
+<app-view-reject-details></app-view-reject-details>
+<app-view-leave-details></app-view-leave-details>
+<app-view-my-leave-reason></app-view-my-leave-reason>
